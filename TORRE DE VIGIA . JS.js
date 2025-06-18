@@ -1,6 +1,6 @@
 javascript:
         if (document.URL.match("mode=incomings&subtype=attacks")) {
-                $("#incomings_table").find("tr").eq(0).find("th").last().after('<th>Torre de Vigia</th>');
+                $("#incomings_table").find("tr").eq(0).find("th").last().after('<th>Watchtower</th>');
                 var url = "https://" + location.host + game_data.link_base_pure + "overview_villages&mode=buildings&group=0&page=-1",
                         url2 = "https://" + location.host + "/interface.php?func=get_unit_info",
                         towerCoords = [],
@@ -9,7 +9,7 @@ javascript:
                         intersectionPoints = [],
                         block = [],
                         timesRun = 1,
-                        //pega o número de ataques entre parênteses no topo da tabela
+                        //grab incoming number in parentheses at top of table
                         rows = Number($("#incomings_table").find("th").first().text().split(" ")[1].replace("(", "").replace(")", ""));
  
  
@@ -18,8 +18,8 @@ javascript:
                                 url: url2,
                                 async: false,
                                 success: function(data) {
-                                        $.each(["sword", "axe", "spy", "light", "heavy", "ram", "snob"], function(key, val) {
-                                                // extrai velocidades das unidades
+                                        $.each(["sword", "axe", "spy", "light", "heavy", "Ariete", "Nobre"], function(key, val) {
+                                                // extract unit speeds
                                                 unitSpeed.push(Number($(data).find("config > " + val + " > speed").text()) * 60);
                                         })
                                         $.ajax({
@@ -28,9 +28,9 @@ javascript:
                                                 success: function(datas) {
                                                         $(datas).find("#villages").find("tr").each(function(key, val) {
                                                                 if (Number($(val).find(".upgrade_building.b_watchtower").text()) > 0) {
-                                                                        // extrai coordenadas e níveis das torres de vigia
+                                                                        // extract coordinates and levels of watchtowers
                                                                         towerCoords.push($(val).find(".quickedit-label").text().match(/\d+\|\d+/)[0]);
-                                                                        // raio da torre de vigia
+                                                                        // radius of watchtower
                                                                         var level = Number($(val).find(".upgrade_building.b_watchtower").text());
                                                                         switch (level) {
                                                                                 case 1:
@@ -97,7 +97,7 @@ javascript:
                                                                 }
                                                         })
                                                         if (towerCoords.length == 0) {
-                                                                UI.ErrorMessage("Não há torres de vigia em nenhuma das suas aldeias!", 5000)
+                                                                UI.ErrorMessage("There are no watchtowers in any of your villages!", 5000)
                                                         }
                                                 },
                                         })
@@ -111,38 +111,38 @@ javascript:
                         //        success: function() {
                                         intersectionPoints = [];
                                         block = [];
-                                        // adiciona uma linha à tabela
+                                        // add a row to the table
                                         $("#incomings_table").find("tr").eq(timesRun).find("td").last().after("<td></td>");
-                                        // pega a distância entre origem e destino
+                                        // get distance between origin and destination
                                         var distance = Number($("#incomings_table").find("tr").eq(timesRun).find("td").eq(4).text().trim());
-                                        // pega as coordenadas de origem e destino
+                                        // get coordinates of origin and destination
                                         var destination = $("#incomings_table").find("tr").eq(timesRun).find("td").eq(1).text().match(/\d+\|\d+/)[0];
                                         var origin = $("#incomings_table").find("tr").eq(timesRun).find("td").eq(2).text().match(/\d+\|\d+/)[0];
-                                        // pega o tempo de chegada e converte para segundos
+                                        // get arrival time and convert to seconds
                                         var hms = $("#incomings_table").find("tr").eq(timesRun).find("td").eq(6).text().split(':'),
                                                 seconds = (+hms[0]) * 3600 + (+hms[1]) * 60 + (+hms[2]),
-                                                // extrai o nome do comando
+                                                // extract command name
                                                 commandName = $("#incomings_table").find("tr").eq(timesRun).find("td").eq(0).text().trim().toLowerCase();
-                                        // converte o tempo de chegada para campos
+                                        // convert arrival time to field (?)
                                        
                                         //console.log(commandName);
-                                        if (commandName.includes("sword") || commandName.includes("espada") || commandName.includes("espadachim")) {
+                                        if (commandName.includes("sword")) {
                                                 var remainingFields = seconds / unitSpeed[0];
-                                        } else if (commandName.includes("axe") || commandName.includes("machado") || commandName.includes("bárbaro") || commandName.includes("spear") || commandName.includes("lança") || commandName.includes("lanceiro")) {
+                                        } else if (commandName.includes("axe") || commandName.includes("spear")) {
                                                 var remainingFields = seconds / unitSpeed[1];
-                                        } else if (commandName.includes("spy") || commandName.includes("scout") || commandName.includes("explorador") || commandName.includes("batedor")) {
+                                        } else if (commandName.includes("spy") || commandName.includes("scout")) {
                                                 var remainingFields = seconds / unitSpeed[2];
-                                        } else if (commandName.includes("lcav") || commandName.includes("light") || commandName.includes("cavalaria leve") || commandName.includes("arqueiro montado")) {
+                                        } else if (commandName.includes("lcav") || commandName.includes("light")) {
                                                 var remainingFields = seconds / unitSpeed[3];
-                                        } else if (commandName.includes("hcav") || commandName.includes("heavy") || commandName.includes("cavalaria pesada") || commandName.includes("cavaleiro")) {
+                                        } else if (commandName.includes("hcav") || commandName.includes("heavy")) {
                                                 var remainingFields = seconds / unitSpeed[4];
-                                        } else if (commandName.includes("ram") || commandName.includes("ariete") || commandName.includes("cat") || commandName.includes("catapulta")) {
+                                        } else if (commandName.includes("Ariete") || commandName.includes("cat")) {
                                                 var remainingFields = seconds / unitSpeed[5];
-                                        }else if (commandName.includes("noble") || commandName.includes("nobre") || commandName.includes("snob") || commandName.includes("paladino")) {
+                                        }else if (commandName.includes("noble") || commandName.includes("Nobre")) {
                                                 var remainingFields = seconds / unitSpeed[6];
                                         }
-                                        //console.log(remainingFields);
-                                        // a inclinação da linha é m = (y1-y2) / (x1-x2), se o divisor for zero, então o divisor deve ser igual a 1
+                                        //console.log(hatralevo_mezo);
+                                        // the slope of the line is m = (y1-y2) / (x1-x2), if the divisor is zero, then the divisor should be equal to 1
                                         var target = String(destination).split("|");
                                         var source = String(origin).split("|");
                                         var divisor = Number(target[0]) - Number(source[0]);
@@ -150,7 +150,7 @@ javascript:
                                                 divisor = 1;
                                         }
                                         var m = (Number(target[1]) - Number(source[1])) / (divisor);
-                                        // onde a linha intersecta o eixo y: y1 = mx1 + b
+                                        // where the line intersects the y axis y1 = mx1 + b
                                         var n = (m * Number(target[0]) - Number(target[1])) / -1;
                                         for (var i = 0; i < towerCoords.length; i++) {
                                                 var h = (String(towerCoords[i]).split("|"))[0];
@@ -160,82 +160,82 @@ javascript:
                                         }
  
                                         function findCircleLineIntersections(r, h, k, m, n) {
-                                                // círculo: (x - h)^2 + (y - k)^2 = r^2
-                                                // linha: y = m * x + n
-                                                // r: raio do círculo
-                                                // h: coordenada x do círculo
-                                                // k: coordenada y do círculo
-                                                // m: inclinação da linha
-                                                // n: intercepto y
-                                                // a, b, c são os coeficientes da equação quadrática
+                                                // circle: (x - h)^2 + (y - k)^2 = r^2
+                                                // line: y = m * x + n
+                                                // r: circle radius
+                                                // h: circle x coords
+                                                // k: circle y coords
+                                                // m: line slope
+                                                // n: y-intercept
+                                                // a, b, c is (?)
                                                 var a = 1 + Math.pow(m, 2);
                                                 var b = -h * 2 + (m * (n - k)) * 2;
                                                 var c = Math.pow(h, 2) + Math.pow(n - k, 2) - Math.pow(r, 2);
-                                                // valor discriminante
+                                                // discriminatory value (?)
                                                 var d = Math.pow(b, 2) - 4 * a * c;
                                                 if (d >= 0) {
-                                                        // fórmula quadrática
+                                                        // quadratic formula
                                                         var intersections = [
                                                                 (-b + Math.sqrt(d)) / 2 / a,
                                                                 (-b - Math.sqrt(d)) / 2 / a
                                                         ];
                                                         if (d == 0) {
-                                                                // a tangente da linha ao círculo (um ponto comum)
+                                                                // the tangent of the line to the circle (a common point) (?)
                                                                 intersectionPoints.push((Number(intersections[0])) + "|" + (Number(m * intersections[0] + n)));
                                                         }
-                                                        // a linha intersecta o contorno (dois pontos comuns)
+                                                        // the line intersects the outline (two common points) (?)
                                                         intersectionPoints.push((Number(intersections[0])) + "|" + (Number(m * intersections[0] + n)));
                                                         intersectionPoints.push((Number(intersections[1])) + "|" + (Number(m * intersections[1] + n)));
                                                 }
-                                                // nada em comum
+                                                // nothing in common (?)
                                         }
                                         //console.log(intersectionPoints.length);
-                                        // se não há ponto comum
+                                        // if no common point
                                         if (intersectionPoints.length == 0) {
-                                                $("#incomings_table").find("tr").eq(timesRun).find("td").last().text("Indetectável").css({
+                                                $("#incomings_table").find("tr").eq(timesRun).find("td").last().text("Undetectable").css({
                                                         "font-weight": "bold",
                                                         "color": "red"
                                                 });
                                                 ++timesRun
                                                 setTimeout(doStuff, 1);
                                         }
-                                        // interseção mais próxima da aldeia de origem no círculo
+                                        // intersection closest to origin village on circle
                                         for (var i = 0; i < intersectionPoints.length; i++) {
                                                 var intersections = intersectionPoints[i].split("|");
-                                                // para cada interseção, calcula a distância até a aldeia de origem
+                                                // for each intersection, calculate distance to origin village
                                                 var originDistance = Math.sqrt((Math.pow((intersections[0] - source[0]), 2) + Math.pow((intersections[1] - source[1]), 2)));
                                                 block.push(originDistance);
                                         }
                                         //console.log(block);
-                                        // encontra o índice da menor distância
+                                        // find index of shortest distance
                                         idx = block.indexOf(Math.min.apply(null, block));
                                         //console.log(idx);
-                                        // com o índice obtido, que é o ponto de interseção mais próximo da aldeia de origem
+                                        // with the index we get, which is the closest intersection point to the village of origin (?)
                                         var nearest = intersectionPoints[idx];
                                         //console.log(nearest);
-                                        // onde estamos indo, ou seja, (distância total - campo restante)
+                                        // where we are going, i.e. (full distance - remaining field)
                                         var currentDistance = distance - remainingFields;
-                                        // (da distância da aldeia de origem e o ponto de interseção mais próximo no círculo) subtraímos o (onde vamos)
-                                        // então obtemos quantos quadrados o ataque está da interseção do círculo e então convertemos isso para segundos (multiplicamos pela velocidade da unidade)
+                                        // (from the distance of the village of origin and the nearest intersection point on the circle) we subtract the (where we go) (?)
+                                        // so we get how many squares the attack is from the intersection of the circle and then we convert this to seconds (multiply by the unit speed)
                                         var M = nearest.split("|");
                                         var remaining = Math.sqrt((Math.pow((M[0] - source[0]), 2) + Math.pow((M[1] - source[1]), 2))) - currentDistance;
                                         //console.log(remaining);
-                                        if (commandName.includes("sword") || commandName.includes("espada") || commandName.includes("espadachim")) {
+                                        if (commandName.includes("sword")) {
                                                 var sec = remaining * unitSpeed[0];
-                                        } else if (commandName.includes("axe") || commandName.includes("machado") || commandName.includes("bárbaro") || commandName.includes("spear") || commandName.includes("lança") || commandName.includes("lanceiro")) {
+                                        } else if (commandName.includes("axe") || commandName.includes("spear")) {
                                                 var sec = remaining * unitSpeed[1];
-                                        } else if (commandName.includes("spy") || commandName.includes("scout") || commandName.includes("explorador") || commandName.includes("batedor")) {
+                                        } else if (commandName.includes("spy") || commandName.includes("scout")) {
                                                 var sec = remaining * unitSpeed[2];
-                                        } else if (commandName.includes("lcav") || commandName.includes("light") || commandName.includes("cavalaria leve") || commandName.includes("arqueiro montado")) {
+                                        } else if (commandName.includes("lcav") || commandName.includes("light")) {
                                                 var sec = remaining * unitSpeed[3];
-                                        } else if (commandName.includes("hcav") || commandName.includes("heavy") || commandName.includes("cavalaria pesada") || commandName.includes("cavaleiro")) {
+                                        } else if (commandName.includes("hcav") || commandName.includes("heavy")) {
                                                 var sec = remaining * unitSpeed[4];
-                                        } else if (commandName.includes("ram") || commandName.includes("ariete") || commandName.includes("cat") || commandName.includes("catapulta")) {
+                                        } else if (commandName.includes("Ariete") || commandName.includes("cat")) {
                                                 var sec = remaining * unitSpeed[5];
-                                        }else if (commandName.includes("noble") || commandName.includes("nobre") || commandName.includes("snob") || commandName.includes("paladino")) {
+                                        }else if (commandName.includes("noble") || commandName.includes("Nobre")) {
                                                 var sec = remaining * unitSpeed[6];
                                         }
-                                        // contagem regressiva em segundos
+                                        // count down in seconds
                                         var myTimer;
  
                                         function clock(x) {
@@ -246,15 +246,15 @@ javascript:
                                                         var seconds = Math.floor(sec % 60);
                                                         var minutes = Math.floor((sec / 60) % 60);
                                                         var hours = Math.floor((sec / (60 * 60)));
-                                                        // se o número for menor que 10, adiciona 0
+                                                        // if the number is less than 10, you enter 0
                                                         seconds = seconds < 10 ? "0" + seconds : seconds;
                                                         minutes = minutes < 10 ? "0" + minutes : minutes;
                                                         hours = hours < 10 ? "0" + hours : hours;
                                                         time = hours + ":" + minutes + ":" + seconds;
-                                                        // adiciona tempo à tabela
+                                                        // add time to table
                                                         if (sec < 0) {
-                                                                // se o ataque estiver dentro do alcance, o sec é negativo
-                                                                var time = "Detectado";
+                                                                // hif the attack is within range, the sec is negative
+                                                                var time = "Detected";
                                                                 $("#incomings_table").find("tr").eq(x).find("td").last().text(time).css({
                                                                         "font-weight": "bold",
                                                                         "color": "green"
