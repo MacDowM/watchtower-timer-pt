@@ -18,7 +18,7 @@ javascript:
                                 url: url2,
                                 async: false,
                                 success: function(data) {
-                                        $.each(["sword", "axe", "spy", "light", "heavy", "ram", "snob"], function(key, val) {
+                                        $.each(["Espadachim", "Bárbaro", "Explorador", "light", "heavy", "Aríete", "Nobre"], function(key, val) {
                                                 // extract unit speeds
                                                 unitSpeed.push(Number($(data).find("config > " + val + " > speed").text()) * 60);
                                         })
@@ -126,19 +126,19 @@ javascript:
                                         // convert arrival time to field (?)
                                        
                                         //console.log(commandName);
-                                        if (commandName.includes("sword")) {
+                                        if (commandName.includes("Espadachim")) {
                                                 var remainingFields = seconds / unitSpeed[0];
-                                        } else if (commandName.includes("axe") || commandName.includes("spear")) {
+                                        } else if (commandName.includes("Bárbaro") || commandName.includes("spear")) {
                                                 var remainingFields = seconds / unitSpeed[1];
-                                        } else if (commandName.includes("spy") || commandName.includes("scout")) {
+                                        } else if (commandName.includes("Explorador") || commandName.includes("scout")) {
                                                 var remainingFields = seconds / unitSpeed[2];
                                         } else if (commandName.includes("lcav") || commandName.includes("light")) {
                                                 var remainingFields = seconds / unitSpeed[3];
                                         } else if (commandName.includes("hcav") || commandName.includes("heavy")) {
                                                 var remainingFields = seconds / unitSpeed[4];
-                                        } else if (commandName.includes("ram") || commandName.includes("cat")) {
+                                        } else if (commandName.includes("Aríete") || commandName.includes("cat")) {
                                                 var remainingFields = seconds / unitSpeed[5];
-                                        }else if (commandName.includes("noble") || commandName.includes("snob")) {
+                                        }else if (commandName.includes("noble") || commandName.includes("Nobre")) {
                                                 var remainingFields = seconds / unitSpeed[6];
                                         }
                                         //console.log(hatralevo_mezo);
@@ -220,19 +220,19 @@ javascript:
                                         var M = nearest.split("|");
                                         var remaining = Math.sqrt((Math.pow((M[0] - source[0]), 2) + Math.pow((M[1] - source[1]), 2))) - currentDistance;
                                         //console.log(remaining);
-                                        if (commandName.includes("sword")) {
+                                        if (commandName.includes("Espadachim")) {
                                                 var sec = remaining * unitSpeed[0];
-                                        } else if (commandName.includes("axe") || commandName.includes("spear")) {
+                                        } else if (commandName.includes("Bárbaro") || commandName.includes("spear")) {
                                                 var sec = remaining * unitSpeed[1];
-                                        } else if (commandName.includes("spy") || commandName.includes("scout")) {
+                                        } else if (commandName.includes("Explorador") || commandName.includes("scout")) {
                                                 var sec = remaining * unitSpeed[2];
                                         } else if (commandName.includes("lcav") || commandName.includes("light")) {
                                                 var sec = remaining * unitSpeed[3];
                                         } else if (commandName.includes("hcav") || commandName.includes("heavy")) {
                                                 var sec = remaining * unitSpeed[4];
-                                        } else if (commandName.includes("ram") || commandName.includes("cat")) {
+                                        } else if (commandName.includes("Aríete") || commandName.includes("cat")) {
                                                 var sec = remaining * unitSpeed[5];
-                                        }else if (commandName.includes("noble") || commandName.includes("snob")) {
+                                        }else if (commandName.includes("noble") || commandName.includes("Nobre")) {
                                                 var sec = remaining * unitSpeed[6];
                                         }
                                         // count down in seconds
